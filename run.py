@@ -17,7 +17,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 input_data = "/projects/F202500017AIVLABDEUCALION/evelinamorim/jsonlusa/"
-output_dir ="/projects/F202500017AIVLABDEUCALION/evelinamorim/results/quen3_8b/"
+output_dir ="/projects/F202500017AIVLABDEUCALION/evelinamorim/results/qwen3_8b/"
 
 file_name_lst = os.listdir(input_data)
 for file_name in file_name_lst:
@@ -53,7 +53,7 @@ for file_name in file_name_lst:
           ganhou a corrida.
          4) None - there is no suitable type for the event.
 
-         Now consider the sentence {sentence_text}, and the following events in the sentence {event_text_lst}. 
+         Now consider the sentence '{sentence_text}', and the following events in the sentence {event_text_lst}. 
 
          Return only a json, nothing more, which has each event as a key, and its value as a dictionary with the type value and the justification for the type.
 
@@ -65,8 +65,9 @@ for file_name in file_name_lst:
         outputs = model.generate(
             **inputs,
             max_new_tokens=512,  # adjust as needed
-            temperature=0.7,  # controls creativity
-            do_sample=True
+            temperature=0,  # controls creativity
+            do_sample=False,
+            eos_token_id=tokenizer.eos_token_id
         )
 
         # Decode the response
@@ -79,3 +80,4 @@ for file_name in file_name_lst:
         print(f"Model response time {time.time() - start_time}")
         print(50 * "-")
         print()
+    break

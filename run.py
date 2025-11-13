@@ -5,7 +5,8 @@ import os
 import json
 import time
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
+#model_id = "mistralai/Mistral-7B-Instruct-v0.2"
+model_id = "/projects/F202500017AIVLABDEUCALION/evelinamorim/hf_cache/Qwen3-8B/"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(
@@ -15,8 +16,8 @@ model = AutoModelForCausalLM.from_pretrained(
      # load_in_4bit=True # Descomente para carregamento quantizado se necessário
 )
 
-input_data = "/content/drive/MyDrive/LIAAD/jsonlusa"
-output_dir = "/content/drive/MyDrive/LIAAD/resultseventype/mistral"
+input_data = "/projects/F202500017AIVLABDEUCALION/evelinamorim/jsonlusa/"
+output_dir ="/projects/F202500017AIVLABDEUCALION/evelinamorim/results/quen3_8b/"
 
 file_name_lst = os.listdir(input_data)
 for file_name in file_name_lst:
@@ -73,10 +74,8 @@ for file_name in file_name_lst:
 
         # Optional: extract only the model's answer (strip the prompt if needed)
         output_file = os.path.join(output_dir,file_name)
-        with open(output_file, "w") as fd:
+        with open(output_file, "a") as fd:
             fd.write(response)
         print(f"Model response time {time.time() - start_time}")
         print(50 * "-")
         print()
-        # break
-    break

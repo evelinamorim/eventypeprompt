@@ -74,16 +74,23 @@ for file_name in file_name_lst:
         output_file = os.path.join(output_dir,file_name)
         with open(output_file, "a") as fd:
             for data in response:
-                match = re.search(r"<json>(.*?)</json>",data["generated_text"], re.DOTALL)
-                if match:
-                    json_content = match.group(1).strip()
-                    data_events = json.loads(json_content)
-                    data_sent = {"sentence":sentence_text,
-                            "events":data_events}
-                    fd.write(f"{data_sent}\n")
+                matches = re.findall(r"<json>(.*?)</json>",data["generated_text"], re.DOTALL)
+                results = []
+                for block in matches:
+                    block = block.strip()
+                    block = block.replace("'",'"')
+                    try:
+                        data_events = json.loads(block)
+                        results.append(data_events)
+                    except json.JSONDecodeError:
+                        print(f"Failed to parse block:\n{block}")
+
+                if results != []:
+                     data_sent = {"sentence":sentence_text,
+                            "events":results}
+                     fd.write(f"{data_sent}\n")
         print(f"Model response time {time.time() - start_time}")
         print(50 * "-")
         print()
-    break
 
 

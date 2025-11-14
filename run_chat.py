@@ -56,9 +56,9 @@ for file_name in file_name_lst:
          For instance, the sentence 'A vítima estava presa.', and the events ['estava']. You should produce:
          
          <json>
-           {
+           {{
               'estava':'STATE'
-           }
+           }}
          </json>
 
         """

@@ -49,7 +49,7 @@ for file_name in file_name_lst:
           ganhou a corrida.
          4) None - there is no suitable type for the event.
 
-         Now consider the sentence '{sentence_text}', and the following events in the sentence {event_text_lst}. 
+         Now consider the sentence '{{sentence_text}}', and the following events in the sentence {{event_text_lst}}. 
 
          Return only a valid json between <json> and </json>, without explanation.
          

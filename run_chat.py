@@ -1,4 +1,4 @@
-
+import re
 from transformers import pipeline
 import os
 import json
@@ -49,7 +49,7 @@ for file_name in file_name_lst:
           ganhou a corrida.
          4) None - there is no suitable type for the event.
 
-         Now consider the sentence '{{sentence_text}}', and the following events in the sentence {{event_text_lst}}. 
+         Now consider the sentence {sentence_text}, and the following events in the sentence {event_text_lst}. 
 
          Return only a valid json between <json> and </json>, without explanation.
          
@@ -68,13 +68,19 @@ for file_name in file_name_lst:
         response = chat_pipeline(
             prompt,
             max_new_tokens=512,
-            temperature=0.0,
             do_sample=False)
 
         # Optional: extract only the model's answer (strip the prompt if needed)
         output_file = os.path.join(output_dir,file_name)
         with open(output_file, "a") as fd:
-            fd.write(response)
+            for data in response:
+                match = re.search(r"<json>(.*?)</json>",data["generated_text"], re.DOTALL)
+                if match:
+                    json_content = match.group(1).strip()
+                    data_events = json.loads(json_content)
+                    data_sent = {"sentence":sentence_text,
+                            "events":data_events}
+                    fd.write(f"{data_sent}\n")
         print(f"Model response time {time.time() - start_time}")
         print(50 * "-")
         print()
